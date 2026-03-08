@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Biblioteca Academia Ligados</title>
+    <link rel="stylesheet" href="ligados-design-system.css">
+    <link rel="icon" href="https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            min-height: 100vh;
+            padding-bottom: var(--sp-xl);
+        }
+
+        .admin-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--sp-m) 5%;
+            background: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-container {
+            max-width: 1100px;
+            margin: var(--sp-xl) auto;
+            padding: 0 var(--sp-m);
+        }
+
+        .dashboard-header {
+            margin-bottom: var(--sp-xl);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: var(--sp-xl);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-section {
+            margin-bottom: var(--sp-xl);
+        }
+
+        .input-group label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input,
+        select,
+        textarea {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: white !important;
+            border-radius: var(--radius-sm) !important;
+            padding: 12px 15px !important;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--brand-accent) !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            outline: none;
+        }
+
+        .file-list {
+            display: grid;
+            gap: var(--sp-m);
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .file-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .file-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .file-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .file-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: var(--sp-m);
+            display: flex;
+            align-items: center;
+            gap: var(--sp-l);
+            transition: all 0.2s ease;
+        }
+
+        .file-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .item-thumb {
+            width: 80px;
+            height: 55px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-msg {
+            margin-top: var(--sp-m);
+            padding: var(--sp-m);
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .success {
+            background: rgba(46, 213, 115, 0.1);
+            color: #2ed573;
+            border: 1px solid #2ed573;
+        }
+
+        .error {
+            background: rgba(255, 71, 87, 0.1);
+            color: #ff4757;
+            border: 1px solid #ff4757;
+        }
+
+        .btn-delete {
+            background: transparent;
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.2);
+            padding: 8px 15px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: #ff4757;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .grid-3,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="admin-nav">
+        <div class="logo-brand" style="transform: scale(0.8);"></div>
+        <div id="logout-btn" onclick="logout()"
+            style="display: none; cursor: pointer; color: var(--brand-accent); font-weight: bold; font-size: 0.8rem; letter-spacing: 1px;">
+            CERRAR SESIÓN</div>
+    </nav>
+
+    <div class="admin-container animate-reveal">
+        <div id="auth-section" class="glass-card" style="max-width: 450px; margin: 100px auto; text-align: center;">
+            <h2 style="margin-bottom: var(--sp-m); color: var(--brand-accent);">Acceso Staff</h2>
+            <p style="opacity: 0.7; margin-bottom: var(--sp-l); font-size: 0.9rem;">Introduce el token de seguridad para
+                gestionar la biblioteca.</p>
+            <div class="input-group" style="text-align: left;">
+                <label>Token Maestro</label>
+                <input type="password" id="admin-token" placeholder="••••••••" style="width: 100%;">
+            </div>
+            <button class="btn" style="width: 100%; margin-top: var(--sp-m);" onclick="checkAuth()">ENTRAR AL
+                PANEL</button>
+        </div>
+
+        <main id="admin-content" style="display: none;">
+            <div class="dashboard-header">
+                <div>
+                    <h1 style="font-size: 2.2rem; color: var(--brand-white);">Admin <span
+                            style="color: var(--brand-accent);">Ligados</span></h1>
+                    <p style="opacity: 0.6;">Gestiona los recursos educativos de la plataforma.</p>
+                </div>
+            </div>
+
+            <section class="form-section">
+                <div class="glass-card">
+                    <h3 style="margin-bottom: var(--sp-l); display: flex; align-items: center; gap: 10px;">
+                        <span
+                            style="width: 30px; height: 30px; background: var(--brand-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-blue); font-size: 1rem;">+</span>
+                        Publicar Nuevo Recurso
+                    </h3>
+                    <form id="upload-form">
+                        <div class="grid grid-3">
+                            <div class="input-group">
+                                <label>Título de la Lección</label>
+                                <input type="text" id="title" required placeholder="Ej: Técnica de Púa Híbrida">
+                            </div>
+                            <div class="input-group">
+                                <label>Instrumento / Área</label>
+                                <select id="instrument" required>
+                                    <option value="guitarra">Guitarra</option>
+                                    <option value="piano">Piano</option>
+                                    <option value="bateria">Batería</option>
+                                    <option value="bajo">Bajo</option>
+                                    <option value="violin">Violín</option>
+                                    <option value="cello">Cello</option>
+                                    <option value="ligaditos">Ligaditos (Niños)</option>
+                                    <option value="teatro">Teatro</option>
+                                    <option value="artes_visuales">Artes Visuales</option>
+                                    <option value="canto">Canto</option>
+                                    <option value="teoria">Teoría / Otros</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Nivel de Dificultad</label>
+                                <select id="level" required>
+                                    <option value="iniciacion">Iniciación</option>
+                                    <option value="intermedio">Intermedio</option>
+                                    <option value="avanzado">Avanzado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-2" style="margin-top: var(--sp-m);">
+                            <div class="input-group">
+                                <label>Formato del Archivo</label>
+                                <select id="category" required>
+                                    <option value="pdf">PDF / Guía / Documento</option>
+                                    <option value="partitura">Partitura / TAB</option>
+                                    <option value="audio">Audio / MP3 / Backing Track</option>
+                                    <option value="video">Clase en Video</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Etiquetas (separadas por coma)</label>
+                                <input type="text" id="tags" placeholder="ej: jazz, armonía, principiante">
+                            </div>
+                        </div>
+
+                        <div class="input-group" style="margin-top: var(--sp-m);">
+                            <label>Breve Descripción</label>
+                            <textarea id="description" rows="2"
+                                placeholder="Describe brevemente de qué trata este material..."></textarea>
+                        </div>
+
+                        <div class="grid grid-2"
+                            style="margin-top: var(--sp-m); background: rgba(255,255,255,0.02); padding: var(--sp-m); border-radius: var(--radius-sm);">
+                            <div class="input-group">
+                                <label>Archivo Principal (PDF, MP3, etc)</label>
+                                <input type="file" id="file" required
+                                    style="border: none !important; background: transparent !important; padding: 0 !important;">
+                            </div>
+                            <div class="input-group">
+                                <label>Miniatura Personalizada (Opcional)</label>
+                                <input type="file" id="thumbnail" accept="image/*"
+                                    style="border: none !important; background: transparent !important; padding: 0 !important;">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: var(--sp-l); display: flex; align-items: center; gap: 20px;">
+                            <button type="submit" class="btn" id="submit-btn" style="min-width: 200px;">PUBLICAR
+                                RECURSO</button>
+                            <div id="upload-status" class="status-msg" style="flex: 1; margin: 0; display: none;"></div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section>
+                <h3 style="margin-bottom: var(--sp-m); opacity: 0.7;">Repositorio de Archivos</h3>
+                <div id="file-list" class="file-list">
+                    <!-- Dinámico -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const API_BASE = "https://biblioteca-ligados-api.academia-ligados-cl.workers.dev";
+        let MASTER_TOKEN = localStorage.getItem("ligados_admin_token") || "";
+
+        if (MASTER_TOKEN) showAdmin();
+
+        function checkAuth() {
+            const token = document.getElementById("admin-token").value;
+            if (token) {
+                MASTER_TOKEN = token;
+                localStorage.setItem("ligados_admin_token", token);
+                showAdmin();
+            }
+        }
+
+        function showAdmin() {
+            document.getElementById("auth-section").style.display = "none";
+            document.getElementById("admin-content").style.display = "block";
+            document.getElementById("logout-btn").style.display = "block";
+            loadFiles();
+        }
+
+        function logout() {
+            localStorage.removeItem("ligados_admin_token");
+            window.location.reload();
+        }
+
+        async function loadFiles() {
+            try {
+                const res = await fetch(`${API_BASE}/api/files`);
+                const files = await res.json();
+                const list = document.getElementById("file-list");
+                list.innerHTML = files.length ? "" : "<p style='opacity:0.5'>No hay recursos publicados todavía.</p>";
+
+                files.reverse().forEach(file => {
+                    const item = document.createElement("div");
+                    item.className = "file-item animate-reveal";
+                    const thumb = file.thumbnail_url || 'https://via.placeholder.com/150?text=Ligados';
+                    item.innerHTML = `
+                        <img src="${thumb}" class="item-thumb" alt="thumb">
+                        <div style="flex: 1;">
+                            <div style="display: flex; gap: 8px; margin-bottom: 2px;">
+                                <span style="font-size: 0.65rem; background: var(--brand-accent); color: var(--brand-blue); padding: 1px 6px; border-radius: 3px; font-weight: bold; text-transform: uppercase;">${file.category}</span>
+                            </div>
+                            <strong style="font-size:1.1rem; color: white;">${file.title}</strong><br>
+                            <small style="opacity: 0.6;">${file.instrument.toUpperCase()} • ${file.level.toUpperCase()} • ${file.size}</small>
+                        </div>
+                        <button class="btn-delete" onclick="deleteFile('${file.id}')">Eliminar</button>
+                    `;
+                    list.appendChild(item);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        document.getElementById("upload-form").onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("submit-btn");
+            const status = document.getElementById("upload-status");
+            btn.disabled = true;
+            btn.textContent = "Subiendo...";
+
+            const formData = new FormData();
+            formData.append("file", document.getElementById("file").files[0]);
+
+            const thumbFile = document.getElementById("thumbnail").files[0];
+            if (thumbFile) formData.append("thumbnail", thumbFile);
+
+            const metadata = {
+                title: document.getElementById("title").value,
+                instrument: document.getElementById("instrument").value,
+                level: document.getElementById("level").value,
+                category: document.getElementById("category").value,
+                description: document.getElementById("description").value,
+                tags: document.getElementById("tags").value.split(",").map(t => t.trim()).filter(t => t)
+            };
+            formData.append("metadata", JSON.stringify(metadata));
+
+            try {
+                const res = await fetch(`${API_BASE}/api/upload`, {
+                    method: "POST",
+                    headers: { "Authorization": `Bearer ${MASTER_TOKEN}` },
+                    body: formData
+                });
+
+                if (res.ok) {
+                    status.textContent = "Publicado con éxito.";
+                    status.className = "status-msg success";
+                    status.style.display = "block";
+                    document.getElementById("upload-form").reset();
+                    loadFiles();
+                } else { throw new Error(); }
+            } catch (err) {
+                status.textContent = "Error al subir. Revisa token/conexión.";
+                status.className = "status-msg error";
+                status.style.display = "block";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Publicar Ahora";
+            }
+        };
+
+        async function deleteFile(id) {
+            if (!confirm("¿Eliminar este recurso?")) return;
+            try {
+                await fetch(`${API_BASE}/api/files/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${MASTER_TOKEN}` }
+                });
+                loadFiles();
+            } catch (err) { alert("Error"); }
+        }
+    </script>
+</body>
+
+</html>

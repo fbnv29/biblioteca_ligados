@@ -1,0 +1,19 @@
+name = "biblioteca-ligados-api"
+main = "index.js"
+compatibility_date = "2024-03-08"
+
+# Identificador de tu cuenta (opcional si usas login en el navegador)
+# account_id = "tu_account_id_aqui"
+
+[[kv_namespaces]]
+binding = "LIBRARY_KV"
+id = "cd20ed98d82049038457e8c189242039"
+
+[[r2_buckets]]
+binding = "LIBRARY_BUCKET"
+bucket_name = "biblioteca-ligados-r2"
+
+[vars]
+# Tu dominio público de R2
+R2_PUBLIC_DOMAIN = "https://pub-c5511ad4a53748229b19f5d37b5c6f07.r2.dev"
+# ADMIN_TOKEN se gestiona ahora como un secreto (wrangler secret put)

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecciones - Academia Ligados</title>
+    <link rel="stylesheet" href="ligados-design-system.css">
+    <link rel="icon" href="https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+
+        .header-minimal {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--brand-blue);
+            padding: var(--sp-m) 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-header {
+            background: var(--bg-secondary);
+            padding: var(--sp-xl) 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .level-tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: var(--sp-m);
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--brand-white);
+            padding: 8px 18px;
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--brand-accent);
+            color: var(--brand-blue);
+            border-color: var(--brand-accent);
+            font-weight: bold;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-sm);
+            padding: 10px 15px;
+            color: white;
+            width: 100%;
+            max-width: 400px;
+            outline: none;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: var(--sp-xl);
+            padding: var(--sp-xl) 0;
+        }
+
+        .resource-card {
+            background: var(--brand-white);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            box-shadow: var(--elevation-1);
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--elevation-2);
+        }
+
+        .card-thumb {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .card-body {
+            padding: var(--sp-l);
+            color: var(--brand-blue);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .card-body p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .level-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: var(--brand-accent);
+            text-transform: uppercase;
+        }
+
+        .category-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--brand-blue);
+            background: rgba(0, 0, 0, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header-minimal">
+        <a href="index.html" class="logo-brand" style="scale: 0.8; transform-origin: left center;"></a>
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <a href="index.html" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.8rem;">Volver al
+                Inicio</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="filter-header animate-reveal">
+            <div class="container">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <h1 id="instrument-title" style="margin-bottom: 5px;">Lecciones de Piano</h1>
+                        <p id="instrument-count" style="opacity: 0.6; font-size: 0.9rem;">Explora materiales exclusivos
+                            por nivel.</p>
+                    </div>
+                    <input type="text" id="search" class="search-box" placeholder="Buscar lección...">
+                </div>
+
+                <div class="level-tabs" id="level-tabs">
+                    <button class="tab-btn active" data-level="all">Todos los Niveles</button>
+                    <button class="tab-btn" data-level="iniciacion">Iniciación</button>
+                    <button class="tab-btn" data-level="intermedio">Intermedio</button>
+                    <button class="tab-btn" data-level="avanzado">Avanzado</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="container">
+            <div class="resource-grid" id="grid">
+                <!-- Dinámico -->
+                <div style="grid-column: 1/-1; text-align: center; padding: 50px; opacity: 0.3;">
+                    Cargando recursos...
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const API_BASE = "https://biblioteca-ligados-api.academia-ligados-cl.workers.dev";
+        let allItems = [];
+        let curLevel = 'all';
+
+        const params = new URLSearchParams(window.location.search);
+        const curInst = params.get('inst') || 'piano';
+
+        async function init() {
+            document.getElementById('instrument-title').textContent = `Lecciones de ${curInst.charAt(0).toUpperCase() + curInst.slice(1)}`;
+            try {
+                const res = await fetch(`${API_BASE}/api/files`);
+                const data = await res.json();
+                allItems = data.filter(r => r.instrument === curInst);
+                document.getElementById('instrument-count').textContent = `${allItems.length} materiales disponibles`;
+                render();
+            } catch (err) {
+                document.getElementById('grid').innerHTML = "<p>Error de conexión.</p>";
+            }
+        }
+
+        function render() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const grid = document.getElementById('grid');
+
+            const filtered = allItems.filter(r => {
+                const matchSearch = r.title.toLowerCase().includes(query);
+                const matchLevel = curLevel === 'all' || r.level === curLevel;
+                return matchSearch && matchLevel;
+            });
+
+            if (!filtered.length) {
+                grid.innerHTML = "<p style='grid-column: 1/-1; text-align: center; padding: 40px; opacity: 0.5;'>No se encontraron materiales para esta selección.</p>";
+                return;
+            }
+
+            grid.innerHTML = filtered.reverse().map(r => `
+                <div class="resource-card animate-reveal">
+                    <img src="${r.thumbnail_url || 'https://via.placeholder.com/400x200?text=Ligados'}" class="card-thumb" alt="preview">
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span class="level-badge">${r.level}</span>
+                            <span class="category-badge">${r.category.toUpperCase()}</span>
+                        </div>
+                        <h3>${r.title}</h3>
+                        <p>${r.description || 'Material didáctico exclusivo para Academia Ligados.'}</p>
+                        <div class="card-footer">
+                            <span style="font-size: 0.75rem; opacity: 0.6; font-weight: 600;">${r.size}</span>
+                            <a href="${r.file_url}" target="_blank" class="btn btn-secondary" style="padding: 6px 15px; font-size: 0.8rem;">DESCARGAR</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('level-tabs').addEventListener('click', e => {
+            if (e.target.dataset.level) {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                curLevel = e.target.dataset.level;
+                render();
+            }
+        });
+
+        document.getElementById('search').addEventListener('input', render);
+
+        init();
+    </script>
+</body>
+
+</html>

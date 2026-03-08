@@ -1,0 +1,268 @@
+/* 
+   ==========================================================================
+   LIGADOS DESIGN SYSTEM - v3.0.0 (Manual de Identidad Visual Autónomo)
+   ==========================================================================
+   ESTE ARCHIVO ES EL ÚNICO PUNTO DE VERDAD PARA LA MARCA "ACADEMIA LIGADOS".
+   Cualquier IA debe seguir estas instrucciones para mantener la consistencia.
+
+   INSTRUCCIONES DE IDENTIDAD:
+   1. LOGO OFICIAL: Usar la variable --brand-logo.
+   2. FAVICON: https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png
+   3. TIPOGRAFÍA: 
+      - Títulos (H1-H4): Futura (o Century Gothic) -> --font-header
+      - Interfaz y Cuerpo: Inter -> --font-ui
+   4. PALETA:
+      - Fondo Principal: --brand-blue (#0b2046)
+      - Superficies/Papel: --brand-white (#FFF4e7)
+      - Acentos/Destacados: --brand-accent (#EEA213)
+   ========================================================================== 
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+/* SECTION: DESIGN TOKENS */
+:root {
+    /* --- Palette --- */
+    --brand-blue: #0b2046;
+    --brand-white: #FFF4e7;
+    --brand-accent: #EEA213;
+    --bg-secondary: #091a38;
+
+    /* --- Assets --- */
+    --brand-logo: url('https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png');
+    --favicon-url: 'https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png';
+
+    /* --- Status --- */
+    --status-success: #2e7d32;
+    --status-error: #d32f2f;
+    --status-warning: #ed6c02;
+
+    /* --- Typography --- */
+    --font-header: 'Futura', 'Century Gothic', 'Tw Cen MT', system-ui, sans-serif;
+    --font-ui: 'Inter', system-ui, sans-serif;
+
+    /* --- Spacing --- */
+    --sp-xs: 4px;
+    --sp-s: 8px;
+    --sp-m: 16px;
+    --sp-l: 24px;
+    --sp-xl: 32px;
+    --sp-xxl: 48px;
+
+    /* --- Radii --- */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 28px;
+    --radius-full: 9999px;
+
+    /* --- Elevation (Shadows) --- */
+    --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --elevation-2: 0 3px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+    --elevation-3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+/* SECTION: RESET & BASE */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-ui);
+    background-color: var(--brand-blue);
+    color: var(--brand-white);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-title {
+    font-family: var(--font-header);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: var(--sp-m);
+    color: inherit;
+}
+
+h1 {
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+}
+
+h2 {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+}
+
+h3 {
+    font-size: clamp(1.4rem, 4vw, 1.8rem);
+}
+
+h4 {
+    font-size: 1.2rem;
+}
+
+/* SECTION: COMPONENTS */
+
+/* --- BOTONES (.btn) --- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--brand-accent);
+    color: var(--brand-blue);
+    box-shadow: var(--elevation-1);
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--elevation-2);
+    filter: brightness(1.05);
+}
+
+.btn-secondary {
+    background: var(--brand-white);
+    color: var(--brand-blue);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--brand-white);
+}
+
+/* --- TARJETAS (.card) --- */
+.card {
+    background: var(--brand-white);
+    color: var(--brand-blue);
+    padding: var(--sp-xl);
+    border-radius: var(--radius-md);
+    box-shadow: var(--elevation-1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-s);
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--elevation-3);
+}
+
+.card h3 {
+    color: var(--brand-blue);
+    margin-bottom: var(--sp-xs);
+}
+
+/* --- INPUTS --- */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-xs);
+    margin-bottom: var(--sp-l);
+}
+
+input,
+select,
+textarea {
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    color: white;
+    font-family: var(--font-ui);
+    outline: none;
+    transition: all 0.2s;
+}
+
+input:focus {
+    border-color: var(--brand-accent);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* SECTION: UTILITIES */
+.icon {
+    font-family: 'Material Symbols Rounded';
+    font-size: 24px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.logo-brand {
+    height: 48px;
+    width: auto;
+    content: var(--brand-logo);
+    /* Exposición directa del asset */
+}
+
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: grid;
+    gap: var(--sp-l);
+}
+
+.grid-2 {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.grid-3 {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.animate-reveal {
+    opacity: 0;
+    animation: reveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* SECTION: RESPONSIVE OVERRIDES */
+@media (max-width: 768px) {
+    :root {
+        --sp-xxl: 32px;
+        --sp-xl: 24px;
+    }
+
+    .container {
+        width: 92%;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 16px 20px;
+    }
+
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+}
