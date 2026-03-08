@@ -146,6 +146,87 @@
             border: 1px solid #ff4757;
         }
 
+        /* --- Modal Styles --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            width: 90%;
+            max-width: 600px;
+            padding: var(--sp-xl);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .close-modal:hover {
+            opacity: 1;
+        }
+
+        /* --- Filter Styles --- */
+        .filter-bar {
+            background: rgba(255, 255, 255, 0.02);
+            padding: var(--sp-m);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--sp-m);
+            display: flex;
+            gap: var(--sp-m);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .file-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .btn-edit:hover {
+            background: var(--brand-accent);
+            color: var(--brand-blue);
+        }
+
         .btn-delete {
             background: transparent;
             color: #ff4757;
@@ -288,7 +369,39 @@
             </section>
 
             <section>
-                <h3 style="margin-bottom: var(--sp-m); opacity: 0.7;">Repositorio de Archivos</h3>
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-m);">
+                    <h3 style="opacity: 0.7; margin: 0;">Repositorio de Archivos</h3>
+                </div>
+
+                <div class="filter-bar">
+                    <input type="text" id="search-files" class="search-input" placeholder="Buscar por título o tags..."
+                        oninput="filterRepository()">
+                    <select id="filter-instrument" onchange="filterRepository()"
+                        style="width: auto; padding: 6px 15px; font-size: 0.8rem;">
+                        <option value="all">Todos los Instrumentos</option>
+                        <option value="guitarra">Guitarra</option>
+                        <option value="piano">Piano</option>
+                        <option value="bateria">Batería</option>
+                        <option value="bajo">Bajo</option>
+                        <option value="violin">Violín</option>
+                        <option value="cello">Cello</option>
+                        <option value="ligaditos">Ligaditos</option>
+                        <option value="teatro">Teatro</option>
+                        <option value="artes_visuales">Artes Visuales</option>
+                        <option value="canto">Canto</option>
+                        <option value="teoria">Teoría</option>
+                    </select>
+                    <select id="filter-category" onchange="filterRepository()"
+                        style="width: auto; padding: 6px 15px; font-size: 0.8rem;">
+                        <option value="all">Todas las Categorías</option>
+                        <option value="pdf">Guías/PDF</option>
+                        <option value="partitura">Partituras</option>
+                        <option value="audio">Audios</option>
+                        <option value="video">Videos</option>
+                    </select>
+                </div>
+
                 <div id="file-list" class="file-list">
                     <!-- Dinámico -->
                 </div>
@@ -296,9 +409,61 @@
         </main>
     </div>
 
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEditModal()">✕</span>
+            <h3 style="color: var(--brand-accent); margin-bottom: var(--sp-l);">Editar Recurso</h3>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <div class="input-group">
+                    <label>Título</label>
+                    <input type="text" id="edit-title" required>
+                </div>
+                <div class="grid grid-2" style="margin-top: var(--sp-m);">
+                    <div class="input-group">
+                        <label>Instrumento</label>
+                        <select id="edit-instrument">
+                            <option value="guitarra">Guitarra</option>
+                            <option value="piano">Piano</option>
+                            <option value="bateria">Batería</option>
+                            <option value="bajo">Bajo</option>
+                            <option value="violin">Violín</option>
+                            <option value="cello">Cello</option>
+                            <option value="ligaditos">Ligaditos</option>
+                            <option value="teatro">Teatro</option>
+                            <option value="artes_visuales">Artes Visuales</option>
+                            <option value="canto">Canto</option>
+                            <option value="teoria">Teoría</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Categoría</label>
+                        <select id="edit-category">
+                            <option value="pdf">PDF / Guía</option>
+                            <option value="partitura">Partitura / TAB</option>
+                            <option value="audio">Audio / MP3</option>
+                            <option value="video">Clase en Video</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top: var(--sp-m);">
+                    <label>Descripción</label>
+                    <textarea id="edit-description" rows="3"></textarea>
+                </div>
+                <div class="input-group" style="margin-top: var(--sp-m);">
+                    <label>Tags (separados por coma)</label>
+                    <input type="text" id="edit-tags">
+                </div>
+                <button type="submit" class="btn" style="width: 100%; margin-top: var(--sp-l);">GUARDAR CAMBIOS</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         const API_BASE = "https://biblioteca-ligados-api.academia-ligados-cl.workers.dev";
         let MASTER_TOKEN = localStorage.getItem("ligados_admin_token") || "";
+        let allFiles = [];
 
         if (MASTER_TOKEN) verifyAndShow();
 
@@ -355,29 +520,109 @@
         async function loadFiles() {
             try {
                 const res = await fetch(`${API_BASE}/api/files`);
-                const files = await res.json();
-                const list = document.getElementById("file-list");
-                list.innerHTML = files.length ? "" : "<p style='opacity:0.5'>No hay recursos publicados todavía.</p>";
-
-                files.reverse().forEach(file => {
-                    const item = document.createElement("div");
-                    item.className = "file-item animate-reveal";
-                    const thumb = file.thumbnail_url || 'https://via.placeholder.com/150?text=Ligados';
-                    item.innerHTML = `
-                        <img src="${thumb}" class="item-thumb" alt="thumb">
-                        <div style="flex: 1;">
-                            <div style="display: flex; gap: 8px; margin-bottom: 2px;">
-                                <span style="font-size: 0.65rem; background: var(--brand-accent); color: var(--brand-blue); padding: 1px 6px; border-radius: 3px; font-weight: bold; text-transform: uppercase;">${file.category}</span>
-                            </div>
-                            <strong style="font-size:1.1rem; color: white;">${file.title}</strong><br>
-                            <small style="opacity: 0.6;">${file.instrument.toUpperCase()} • ${file.level.toUpperCase()} • ${file.size}</small>
-                        </div>
-                        <button class="btn-delete" onclick="deleteFile('${file.id}')">Eliminar</button>
-                    `;
-                    list.appendChild(item);
-                });
+                allFiles = await res.json();
+                renderFiles(allFiles);
             } catch (err) { console.error(err); }
         }
+
+        function renderFiles(files) {
+            const list = document.getElementById("file-list");
+            list.innerHTML = files.length ? "" : "<p style='opacity:0.5; padding: 20px; text-align: center;'>No se encontraron recursos.</p>";
+
+            [...files].reverse().forEach(file => {
+                const item = document.createElement("div");
+                item.className = "file-item animate-reveal";
+                const thumb = file.thumbnail_url || 'https://via.placeholder.com/150?text=Ligados';
+                item.innerHTML = `
+                    <img src="${thumb}" class="item-thumb" alt="thumb">
+                    <div style="flex: 1;">
+                        <div style="display: flex; gap: 8px; margin-bottom: 2px;">
+                            <span style="font-size: 0.65rem; background: var(--brand-accent); color: var(--brand-blue); padding: 1px 6px; border-radius: 3px; font-weight: bold; text-transform: uppercase;">${file.category}</span>
+                        </div>
+                        <strong style="font-size:1.1rem; color: white;">${file.title}</strong><br>
+                        <small style="opacity: 0.6;">${file.instrument.toUpperCase()} • ${file.level.toUpperCase()} • ${file.size}</small>
+                    </div>
+                    <div class="file-item-actions">
+                        <button class="btn-edit" onclick="openEditModal('${file.id}')">Editar</button>
+                        <button class="btn-delete" onclick="deleteFile('${file.id}')">Eliminar</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function filterRepository() {
+            const searchTerm = document.getElementById("search-files").value.toLowerCase();
+            const instrument = document.getElementById("filter-instrument").value;
+            const category = document.getElementById("filter-category").value;
+
+            const filtered = allFiles.filter(file => {
+                const matchesSearch = file.title.toLowerCase().includes(searchTerm) ||
+                    (file.tags && file.tags.some(t => t.toLowerCase().includes(searchTerm)));
+                const matchesInstrument = instrument === "all" || file.instrument === instrument;
+                const matchesCategory = category === "all" || file.category === category;
+                return matchesSearch && matchesInstrument && matchesCategory;
+            });
+
+            renderFiles(filtered);
+        }
+
+        function openEditModal(id) {
+            const file = allFiles.find(f => f.id === id);
+            if (!file) return;
+
+            document.getElementById("edit-id").value = file.id;
+            document.getElementById("edit-title").value = file.title;
+            document.getElementById("edit-instrument").value = file.instrument;
+            document.getElementById("edit-category").value = file.category;
+            document.getElementById("edit-description").value = file.description || "";
+            document.getElementById("edit-tags").value = (file.tags || []).join(", ");
+
+            document.getElementById("edit-modal").style.display = "flex";
+        }
+
+        function closeEditModal() {
+            document.getElementById("edit-modal").style.display = "none";
+        }
+
+        document.getElementById("edit-form").onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById("edit-id").value;
+            const btn = e.target.querySelector('button');
+            const originalText = btn.textContent;
+
+            btn.disabled = true;
+            btn.textContent = "Guardando...";
+
+            const updates = {
+                title: document.getElementById("edit-title").value,
+                instrument: document.getElementById("edit-instrument").value,
+                category: document.getElementById("edit-category").value,
+                description: document.getElementById("edit-description").value,
+                tags: document.getElementById("edit-tags").value.split(",").map(t => t.trim()).filter(t => t)
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/api/files/${id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${MASTER_TOKEN}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(updates)
+                });
+
+                if (res.ok) {
+                    closeEditModal();
+                    loadFiles(); // Refresh the list
+                } else { alert("Error al actualizar metadatos."); }
+            } catch (err) {
+                alert("Error de conexión.");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        };
 
         document.getElementById("upload-form").onsubmit = async (e) => {
             e.preventDefault();

@@ -146,6 +146,39 @@ export default {
       });
     }
 
+    // PUT /api/files/:id - Update metadata only
+    if (url.pathname.startsWith("/api/files/") && method === "PUT") {
+      if (!isAuthorized) return new Response("Unauthorized", { status: 401, headers: corsHeaders });
+
+      const id = url.pathname.split("/").pop();
+      const existingVal = await env.LIBRARY_KV.get(id);
+      if (!existingVal) return new Response("Not Found", { status: 404, headers: corsHeaders });
+
+      try {
+        const updates = await request.json();
+        const existingMetadata = JSON.parse(existingVal);
+
+        // Merge updates safely
+        const updatedMetadata = {
+          ...existingMetadata,
+          ...updates,
+          id: existingMetadata.id, // ID remains constant
+          file_url: existingMetadata.file_url, // URL remains constant
+          file_name: existingMetadata.file_name, // Key remains constant
+          size: existingMetadata.size, // Size remains constant
+          date_uploaded: existingMetadata.date_uploaded // Date remains constant
+        };
+
+        await env.LIBRARY_KV.put(id, JSON.stringify(updatedMetadata));
+
+        return new Response(JSON.stringify(updatedMetadata), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } catch (err) {
+        return new Response("Invalid JSON", { status: 400, headers: corsHeaders });
+      }
+    }
+
     return new Response("Not Found", { status: 404, headers: corsHeaders });
   },
 };
