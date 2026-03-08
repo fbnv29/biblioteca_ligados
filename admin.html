@@ -7,6 +7,7 @@
     <title>Admin - Biblioteca Academia Ligados</title>
     <link rel="stylesheet" href="ligados-design-system.css">
     <link rel="icon" href="https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
@@ -243,6 +244,11 @@
             color: white;
         }
 
+        .material-icons {
+            vertical-align: middle;
+            line-height: .8;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
 
@@ -258,8 +264,9 @@
     <nav class="admin-nav">
         <div class="logo-brand" style="transform: scale(0.8);"></div>
         <div id="logout-btn" onclick="logout()"
-            style="display: none; cursor: pointer; color: var(--brand-accent); font-weight: bold; font-size: 0.8rem; letter-spacing: 1px;">
-            CERRAR SESIÓN</div>
+            style="display: none; cursor: pointer; color: var(--brand-accent); font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; display: flex; align-items: center; gap: 8px;">
+            <span class="material-icons" style="font-size: 1.1rem;">logout</span> CERRAR SESIÓN
+        </div>
     </nav>
 
     <div class="admin-container animate-reveal">
@@ -271,8 +278,11 @@
                 <label>Token Maestro</label>
                 <input type="password" id="admin-token" placeholder="••••••••" style="width: 100%;">
             </div>
-            <button class="btn" style="width: 100%; margin-top: var(--sp-m);" onclick="checkAuth()">ENTRAR AL
-                PANEL</button>
+            <button class="btn"
+                style="width: 100%; margin-top: var(--sp-m); display: flex; align-items: center; justify-content: center; gap: 10px;"
+                onclick="checkAuth()">
+                <span class="material-icons">login</span> ENTRAR AL PANEL
+            </button>
         </div>
 
         <main id="admin-content" style="display: none;">
@@ -287,8 +297,7 @@
             <section class="form-section">
                 <div class="glass-card">
                     <h3 style="margin-bottom: var(--sp-l); display: flex; align-items: center; gap: 10px;">
-                        <span
-                            style="width: 30px; height: 30px; background: var(--brand-accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-blue); font-size: 1rem;">+</span>
+                        <span class="material-icons" style="color: var(--brand-accent);">add_circle</span>
                         Publicar Nuevo Recurso
                     </h3>
                     <form id="upload-form">
@@ -360,8 +369,10 @@
                         </div>
 
                         <div style="margin-top: var(--sp-l); display: flex; align-items: center; gap: 20px;">
-                            <button type="submit" class="btn" id="submit-btn" style="min-width: 200px;">PUBLICAR
-                                RECURSO</button>
+                            <button type="submit" class="btn" id="submit-btn"
+                                style="min-width: 200px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                                <span class="material-icons">cloud_upload</span> PUBLICAR RECURSO
+                            </button>
                             <div id="upload-status" class="status-msg" style="flex: 1; margin: 0; display: none;"></div>
                         </div>
                     </form>
@@ -371,7 +382,9 @@
             <section>
                 <div
                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--sp-m);">
-                    <h3 style="opacity: 0.7; margin: 0;">Repositorio de Archivos</h3>
+                    <h3 style="opacity: 0.7; margin: 0; display: flex; align-items: center; gap: 10px;">
+                        <span class="material-icons">folder</span> Repositorio de Archivos
+                    </h3>
                 </div>
 
                 <div class="filter-bar">
@@ -543,8 +556,12 @@
                         <small style="opacity: 0.6;">${file.instrument.toUpperCase()} • ${file.level.toUpperCase()} • ${file.size}</small>
                     </div>
                     <div class="file-item-actions">
-                        <button class="btn-edit" onclick="openEditModal('${file.id}')">Editar</button>
-                        <button class="btn-delete" onclick="deleteFile('${file.id}')">Eliminar</button>
+                        <button class="btn-edit" onclick="openEditModal('${file.id}')" style="display: flex; align-items: center; gap: 5px;">
+                            <span class="material-icons" style="font-size: 1rem;">edit</span> Editar
+                        </button>
+                        <button class="btn-delete" onclick="deleteFile('${file.id}')" style="display: flex; align-items: center; gap: 5px;">
+                            <span class="material-icons" style="font-size: 1rem;">delete</span> Eliminar
+                        </button>
                     </div>
                 `;
                 list.appendChild(item);

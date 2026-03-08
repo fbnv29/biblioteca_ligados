@@ -7,6 +7,7 @@
     <title>Lecciones - Academia Ligados</title>
     <link rel="stylesheet" href="ligados-design-system.css">
     <link rel="icon" href="https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
             padding-top: 80px;
@@ -60,11 +61,30 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--radius-sm);
-            padding: 10px 15px;
+            padding: 10px 15px 10px 45px;
             color: white;
             width: 100%;
             max-width: 400px;
             outline: none;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-container .material-icons {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.4;
+        }
+
+        .material-icons {
+            vertical-align: middle;
+            line-height: 1;
         }
 
         .resource-grid {
@@ -148,8 +168,10 @@
     <header class="header-minimal">
         <a href="index.html" class="logo-brand" style="scale: 0.8; transform-origin: left center;"></a>
         <div style="display: flex; gap: 20px; align-items: center;">
-            <a href="index.html" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.8rem;">Volver al
-                Inicio</a>
+            <a href="index.html" class="btn btn-outline"
+                style="padding: 8px 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;">
+                <span class="material-icons" style="font-size: 1.1rem;">arrow_back</span> Volver al Inicio
+            </a>
         </div>
     </header>
 
@@ -163,7 +185,10 @@
                         <p id="instrument-count" style="opacity: 0.6; font-size: 0.9rem;">Explora materiales exclusivos
                             por nivel.</p>
                     </div>
-                    <input type="text" id="search" class="search-box" placeholder="Buscar lección...">
+                    <div class="search-container">
+                        <span class="material-icons">search</span>
+                        <input type="text" id="search" class="search-box" placeholder="Buscar lección...">
+                    </div>
                 </div>
 
                 <div class="level-tabs" id="level-tabs">
@@ -232,8 +257,12 @@
                         <h3>${r.title}</h3>
                         <p>${r.description || 'Material didáctico exclusivo para Academia Ligados.'}</p>
                         <div class="card-footer">
-                            <span style="font-size: 0.75rem; opacity: 0.6; font-weight: 600;">${r.size}</span>
-                            <a href="${r.file_url}" target="_blank" class="btn btn-secondary" style="padding: 6px 15px; font-size: 0.8rem;">DESCARGAR</a>
+                            <span style="font-size: 0.75rem; opacity: 0.6; font-weight: 600; display: flex; align-items: center; gap: 5px;">
+                                <span class="material-icons" style="font-size: 0.9rem;">sd_storage</span> ${r.size}
+                            </span>
+                            <a href="${r.file_url}" target="_blank" class="btn btn-secondary" style="padding: 6px 15px; font-size: 0.8rem; display: flex; align-items: center; gap: 8px;">
+                                <span class="material-icons" style="font-size: 1rem;">download</span> DESCARGAR
+                            </a>
                         </div>
                     </div>
                 </div>
