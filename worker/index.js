@@ -20,6 +20,20 @@ export default {
 
     // --- API Routes ---
 
+    // GET /api/verify - Check if token is valid
+    if (url.pathname === "/api/verify" && method === "GET") {
+      if (isAuthorized) {
+        return new Response(JSON.stringify({ valid: true }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } else {
+        return new Response(JSON.stringify({ valid: false }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     // GET /api/files - Get all resources
     if (url.pathname === "/api/files" && method === "GET") {
       const list = await env.LIBRARY_KV.list();

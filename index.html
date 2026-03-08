@@ -119,11 +119,32 @@
 <body>
 
     <header class="header-minimal">
-        <a href="index.html" class="logo-brand" style="scale: 0.8; transform-origin: left center;"></a>
+        <a href="javascript:void(0)" onclick="handleAdminTrigger()" class="logo-brand"
+            style="scale: 0.8; transform-origin: left center;"></a>
         <div style="display: flex; gap: 20px; align-items: center;">
-            <a href="admin.html" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.8rem;">Gestión Admin</a>
+            <span id="admin-hint" style="font-size: 0.7rem; opacity: 0; transition: opacity 0.3s;">Sigilo
+                activado...</span>
         </div>
     </header>
+
+    <script>
+        let logoClicks = 0;
+        let clickTimer;
+
+        function handleAdminTrigger() {
+            logoClicks++;
+            clearTimeout(clickTimer);
+
+            if (logoClicks >= 5) {
+                window.location.href = 'admin.html';
+                return;
+            }
+
+            clickTimer = setTimeout(() => {
+                logoClicks = 0;
+            }, 1000);
+        }
+    </script>
 
     <main>
         <section class="hero-short animate-reveal">
