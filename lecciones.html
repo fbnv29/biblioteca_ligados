@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="ligados-design-system.css">
     <link rel="icon" href="https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="config.js"></script>
     <style>
         body {
             padding-top: 80px;
@@ -160,6 +161,26 @@
             border-radius: 4px;
             text-transform: uppercase;
         }
+
+        /* Skeleton Loaders */
+        .skeleton {
+            background: #eee;
+            background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+            border-radius: var(--radius-md);
+            background-size: 200% 100%;
+            animation: 1.5s shine linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position-x: -200%;
+            }
+        }
+
+        .skeleton-card {
+            height: 380px;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -202,16 +223,38 @@
 
         <section class="container">
             <div class="resource-grid" id="grid">
-                <!-- Dinámico -->
-                <div style="grid-column: 1/-1; text-align: center; padding: 50px; opacity: 0.3;">
-                    Cargando recursos...
-                </div>
+                <!-- Skeleton Loader Initial -->
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
+                <div class="skeleton skeleton-card"></div>
             </div>
         </section>
     </main>
 
+    <footer
+        style="margin-top: var(--sp-xl); padding: var(--sp-xl) 0; border-top: 1px solid rgba(0, 0, 0, 0.05); text-align: center; background: #f8f9fa;">
+        <div class="container">
+            <div style="margin-bottom: var(--sp-m);">
+                <span class="logo-brand"
+                    style="display: inline-block; scale: 0.6; opacity: 0.8; filter: invert(0.8);"></span>
+            </div>
+            <div style="display: flex; justify-content: center; gap: var(--sp-l); margin-bottom: var(--sp-m);">
+                <a href="https://wa.me/56942151719" target="_blank"
+                    style="color: var(--brand-blue); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                    <span class="material-icons" style="font-size: 1.2rem;">chat</span> WhatsApp
+                </a>
+                <a href="https://instagram.com/academialigados" target="_blank"
+                    style="color: var(--brand-blue); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 600;">
+                    <span class="material-icons" style="font-size: 1.2rem;">photo_camera</span> @academialigados
+                </a>
+            </div>
+            <p style="opacity: 0.4; font-size: 0.8rem; color: var(--brand-blue); letter-spacing: 1px;">&copy; 2026
+                ACADEMIA MUSICAL LIGADOS • CHILE</p>
+        </div>
+    </footer>
+
     <script>
-        const API_BASE = "https://biblioteca-ligados-api.academia-ligados-cl.workers.dev";
+        const API_BASE = CONFIG.API_BASE;
         let allItems = [];
         let curLevel = 'all';
 

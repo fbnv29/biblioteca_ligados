@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="ligados-design-system.css">
     <link rel="icon" href="https://res.cloudinary.com/dhw3ebc6w/image/upload/v1772942627/ligados_crop_db1aed.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="config.js"></script>
     <style>
         body {
             padding-top: 80px;
@@ -144,7 +145,7 @@
     </header>
 
     <script>
-        const API_BASE = "https://biblioteca-ligados-api.academia-ligados-cl.workers.dev";
+        const API_BASE = CONFIG.API_BASE;
         let logoClicks = 0;
         let clickTimer;
 
@@ -164,14 +165,8 @@
 
         async function updateCounters() {
             try {
-                const res = await fetch(`${API_BASE}/api/files`);
-                const files = await res.json();
-
-                // Agrupar por instrumento
-                const counts = files.reduce((acc, file) => {
-                    acc[file.instrument] = (acc[file.instrument] || 0) + 1;
-                    return acc;
-                }, {});
+                const res = await fetch(`${API_BASE}/api/stats`);
+                const counts = await res.json();
 
                 // Actualizar badges
                 document.querySelectorAll('.instrument-card').forEach(card => {
@@ -317,8 +312,25 @@
         </section>
     </main>
 
-    <footer style="text-align: center; padding: var(--sp-xl) 0; opacity: 0.4; font-size: 0.8rem;">
-        <p>&copy; 2026 Academia Musical Ligados</p>
+    <footer
+        style="margin-top: var(--sp-xl); padding: var(--sp-xl) 0; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center; background: var(--brand-blue);">
+        <div class="container">
+            <div style="margin-bottom: var(--sp-m);">
+                <span class="logo-brand" style="display: inline-block; scale: 0.6; opacity: 0.8;"></span>
+            </div>
+            <div style="display: flex; justify-content: center; gap: var(--sp-l); margin-bottom: var(--sp-m);">
+                <a href="https://wa.me/56942151719" target="_blank"
+                    style="color: var(--brand-accent); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 500;">
+                    <span class="material-icons" style="font-size: 1.2rem;">chat</span> WhatsApp
+                </a>
+                <a href="https://instagram.com/academialigados" target="_blank"
+                    style="color: var(--brand-accent); text-decoration: none; display: flex; align-items: center; gap: 8px; font-weight: 500;">
+                    <span class="material-icons" style="font-size: 1.2rem;">photo_camera</span> @academialigados
+                </a>
+            </div>
+            <p style="opacity: 0.4; font-size: 0.8rem; letter-spacing: 1px;">&copy; 2026 ACADEMIA MUSICAL LIGADOS •
+                CHILE</p>
+        </div>
     </footer>
 
 </body>

@@ -179,6 +179,25 @@ export default {
       }
     }
 
+    // GET /api/stats - Resource counts per instrument
+    if (url.pathname === "/api/stats" && method === "GET") {
+      const list = await env.LIBRARY_KV.list();
+      const counts = {};
+
+      for (const key of list.keys) {
+        const val = await env.LIBRARY_KV.get(key.name);
+        if (val) {
+          const metadata = JSON.parse(val);
+          const inst = metadata.instrument;
+          counts[inst] = (counts[inst] || 0) + 1;
+        }
+      }
+
+      return new Response(JSON.stringify(counts), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     return new Response("Not Found", { status: 404, headers: corsHeaders });
   },
 };
