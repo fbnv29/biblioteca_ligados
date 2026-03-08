@@ -110,9 +110,22 @@
                 height: 300px;
             }
 
-            .card-overlay h3 {
+            .instrument-card h3 {
                 font-size: 1.5rem;
             }
+        }
+
+        /* Smart Locking */
+        .card-locked {
+            filter: grayscale(0.5) contrast(0.8);
+            cursor: default !important;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .card-locked:hover {
+            transform: none !important;
+            box-shadow: none !important;
         }
     </style>
 </head>
@@ -165,9 +178,17 @@
                     const inst = card.dataset.inst;
                     const count = counts[inst] || 0;
                     const badge = card.querySelector('.catalog-badge');
+
                     if (badge) {
                         badge.textContent = count > 0 ? `${count} Recursos` : "Próximamente";
-                        if (count === 0) badge.style.opacity = "0.6";
+                        if (count === 0) {
+                            badge.style.opacity = "0.6";
+                            card.classList.add('card-locked');
+                            card.href = "javascript:void(0)";
+                        } else {
+                            card.classList.remove('card-locked');
+                            card.href = `lecciones.html?inst=${inst}`;
+                        }
                     }
                 });
             } catch (err) {
