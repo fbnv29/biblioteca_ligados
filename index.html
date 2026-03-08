@@ -131,6 +131,7 @@
     </header>
 
     <script>
+        const API_BASE = "https://biblioteca-ligados-api.academia-ligados-cl.workers.dev";
         let logoClicks = 0;
         let clickTimer;
 
@@ -147,6 +148,34 @@
                 logoClicks = 0;
             }, 1000);
         }
+
+        async function updateCounters() {
+            try {
+                const res = await fetch(`${API_BASE}/api/files`);
+                const files = await res.json();
+
+                // Agrupar por instrumento
+                const counts = files.reduce((acc, file) => {
+                    acc[file.instrument] = (acc[file.instrument] || 0) + 1;
+                    return acc;
+                }, {});
+
+                // Actualizar badges
+                document.querySelectorAll('.instrument-card').forEach(card => {
+                    const inst = card.dataset.inst;
+                    const count = counts[inst] || 0;
+                    const badge = card.querySelector('.catalog-badge');
+                    if (badge) {
+                        badge.textContent = count > 0 ? `${count} Recursos` : "Próximamente";
+                        if (count === 0) badge.style.opacity = "0.6";
+                    }
+                });
+            } catch (err) {
+                console.error("Error al cargar contadores", err);
+            }
+        }
+
+        updateCounters();
     </script>
 
     <main>
@@ -160,7 +189,7 @@
         <section class="container">
             <div class="instrument-grid">
 
-                <a href="lecciones.html?inst=guitarra" class="instrument-card animate-reveal">
+                <a href="lecciones.html?inst=guitarra" class="instrument-card animate-reveal" data-inst="guitarra">
                     <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=800&q=80"
                         class="card-bg" alt="Guitarra">
                     <span class="catalog-badge">Recursos</span>
@@ -169,7 +198,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=piano" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=piano" class="instrument-card animate-reveal" data-inst="piano"
                     style="animation-delay: 0.1s;">
                     <img src="assets/piano.png" class="card-bg" alt="Piano">
                     <span class="catalog-badge">Recursos</span>
@@ -178,7 +207,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=bateria" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=bateria" class="instrument-card animate-reveal" data-inst="bateria"
                     style="animation-delay: 0.2s;">
                     <img src="https://images.unsplash.com/photo-1519892300165-cb5542fb47c7?auto=format&fit=crop&w=800&q=80"
                         class="card-bg" alt="Batería">
@@ -188,7 +217,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=bajo" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=bajo" class="instrument-card animate-reveal" data-inst="bajo"
                     style="animation-delay: 0.3s;">
                     <img src="https://images.unsplash.com/photo-1485278537138-4e8911a13c02?auto=format&fit=crop&w=800&q=80"
                         class="card-bg" alt="Bajo">
@@ -198,7 +227,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=violin" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=violin" class="instrument-card animate-reveal" data-inst="violin"
                     style="animation-delay: 0.4s;">
                     <img src="assets/violin.png" class="card-bg" alt="Violín">
                     <span class="catalog-badge">Recursos</span>
@@ -207,7 +236,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=cello" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=cello" class="instrument-card animate-reveal" data-inst="cello"
                     style="animation-delay: 0.5s;">
                     <img src="assets/cello.png" class="card-bg" alt="Cello">
                     <span class="catalog-badge">Recursos</span>
@@ -216,7 +245,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=ligaditos" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=ligaditos" class="instrument-card animate-reveal" data-inst="ligaditos"
                     style="animation-delay: 0.6s;">
                     <img src="assets/ligaditos.png" class="card-bg" alt="Ligaditos">
                     <span class="catalog-badge">Recursos</span>
@@ -225,7 +254,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=teatro" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=teatro" class="instrument-card animate-reveal" data-inst="teatro"
                     style="animation-delay: 0.7s;">
                     <img src="assets/teatro.png" class="card-bg" alt="Teatro">
                     <span class="catalog-badge">Recursos</span>
@@ -235,7 +264,7 @@
                 </a>
 
                 <a href="lecciones.html?inst=artes_visuales" class="instrument-card animate-reveal"
-                    style="animation-delay: 0.8s;">
+                    data-inst="artes_visuales" style="animation-delay: 0.8s;">
                     <img src="assets/artes_visuales.png" class="card-bg" alt="Artes Visuales">
                     <span class="catalog-badge">Recursos</span>
                     <div class="card-overlay">
@@ -243,7 +272,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=canto" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=canto" class="instrument-card animate-reveal" data-inst="canto"
                     style="animation-delay: 0.9s;">
                     <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=800&q=80"
                         class="card-bg" alt="Canto">
@@ -253,7 +282,7 @@
                     </div>
                 </a>
 
-                <a href="lecciones.html?inst=teoria" class="instrument-card animate-reveal"
+                <a href="lecciones.html?inst=teoria" class="instrument-card animate-reveal" data-inst="teoria"
                     style="animation-delay: 1.0s;">
                     <img src="https://images.unsplash.com/photo-1507838153414-b4b713384a76?auto=format&fit=crop&w=800&q=80"
                         class="card-bg" alt="Teoría">
